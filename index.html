@@ -19,6 +19,26 @@ section{padding:78px 0;border-top:1px solid #ffffff0e}.section-head{display:flex
 footer{padding:26px 0;color:#788598;font-size:11px}.foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
 @media(max-width:800px){.links{display:none}.hero{padding:72px 0 60px}.hero-grid{grid-template-columns:1fr}.visual{min-height:280px}.about-grid{grid-template-columns:1fr}.skills{grid-template-columns:repeat(2,1fr)}.section-head{display:block}.section-head p{margin-top:12px}.contact{display:block}.contact .btn{margin-top:10px}}
 @media(max-width:520px){.wrap{width:min(100% - 28px,1120px)}h1{letter-spacing:-3px}.projects,.education{grid-template-columns:1fr}.skills{grid-template-columns:1fr 1fr}.navbtn{font-size:11px;padding:9px 12px}.hero{padding-top:58px}}
+
+/* Tamil AI avatar */
+.avatar-launch{position:fixed;right:18px;bottom:18px;z-index:50;border:1px solid #8df0d0;background:#8df0d0;color:#07120f;border-radius:999px;padding:13px 18px;font-weight:850;box-shadow:0 12px 40px #0008;cursor:pointer}
+.avatar-panel{position:fixed;right:18px;bottom:78px;z-index:51;width:min(390px,calc(100vw - 28px));height:min(610px,calc(100dvh - 105px));display:none;grid-template-rows:auto auto 1fr auto auto;background:#10151e;border:1px solid #354153;border-radius:22px;overflow:hidden;box-shadow:0 22px 80px #000b}
+.avatar-panel.open{display:grid}.avatar-head{padding:13px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #293343}.avatar-head strong{font-size:14px}.avatar-head small{display:block;color:#9ba7b8;font-size:11px}.avatar-close{background:#202a38;color:#fff;border:0;border-radius:9px;padding:7px 10px;font-size:18px}
+.avatar-stage{height:190px;background:radial-gradient(ellipse at center,#1b3433,#0b1018 70%);position:relative;display:grid;place-items:center;border-bottom:1px solid #293343}
+.avatar-stage model-viewer{width:100%;height:100%;--poster-color:transparent;background:transparent}
+.avatar-state{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:#bce9db;background:#0a1210c9;border:1px solid #345448;padding:4px 10px;border-radius:99px;white-space:nowrap}
+.avatar-chat{padding:13px;overflow:auto;display:flex;flex-direction:column;gap:9px;min-height:0}
+.avatar-msg{max-width:88%;padding:9px 11px;border-radius:13px;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+.avatar-msg.bot{background:#1b2632;color:#edf5f4;align-self:flex-start;border:1px solid #2b3a49}
+.avatar-msg.user{background:#8df0d0;color:#07120f;align-self:flex-end}
+.avatar-tools{display:flex;gap:8px;padding:0 12px 10px}
+.avatar-inputrow{display:flex;gap:7px;padding:11px;border-top:1px solid #293343}
+.avatar-inputrow input{min-width:0;flex:1;background:#0b1018;border:1px solid #344153;color:#fff;border-radius:11px;padding:11px;font-size:13px;outline:none}
+.avatar-send,.avatar-mic{border:0;border-radius:11px;padding:10px 12px;font-weight:800;cursor:pointer}
+.avatar-send{background:#8df0d0;color:#07120f}.avatar-mic{background:#202b3a;color:#e8f2f2}
+.avatar-note{padding:0 13px 10px;color:#8e9bad;font-size:10px}
+@media(max-width:520px){.avatar-launch{right:12px;bottom:12px}.avatar-panel{right:8px;bottom:70px;width:calc(100vw - 16px);height:min(590px,calc(100dvh - 85px))}}
+
 </style>
 </head>
 <body>
@@ -45,4 +65,47 @@ footer{padding:26px 0;color:#788598;font-size:11px}.foot{display:flex;justify-co
 </main>
 <footer><div class="wrap foot"><span>© <span id="year"></span> Gokul. Designed & built with curiosity.</span><a href="#home">Back to top ↑</a></div></footer>
 <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+
+<!-- Tamil AI talking avatar -->
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+<button class="avatar-launch" id="avatarLaunch" aria-expanded="false">🤖 Talk to my AI avatar</button>
+<aside class="avatar-panel" id="avatarPanel" aria-label="Tamil AI portfolio assistant">
+  <div class="avatar-head"><div><strong>Gokul's AI Avatar</strong><small>தமிழில் பேசலாம் · Ask about my portfolio</small></div><button class="avatar-close" id="avatarClose" aria-label="Close">×</button></div>
+  <div class="avatar-stage">
+    <model-viewer src="https://raw.githubusercontent.com/gokulmaniraj2008-collab/Gokul.glb/main/character" alt="Gokul's 3D avatar" camera-controls disable-pan camera-orbit="0deg 75deg 2.5m" min-camera-orbit="auto 40deg auto" max-camera-orbit="auto 100deg auto" shadow-intensity="0.7" exposure="1" interaction-prompt="none" loading="eager"></model-viewer>
+    <span class="avatar-state" id="avatarState">வணக்கம்! Ask me anything about Gokul.</span>
+  </div>
+  <div class="avatar-chat" id="avatarChat" aria-live="polite">
+    <div class="avatar-msg bot">வணக்கம்! நான் Gokul-ன் portfolio AI assistant. அவருடைய projects, skills, education பற்றி தமிழில் கேளுங்கள்! 😊</div>
+  </div>
+  <div class="avatar-tools"><button class="avatar-mic" id="avatarMic">🎙️ பேசுங்கள்</button><button class="avatar-mic" id="avatarStop">🔇 Stop voice</button></div>
+  <form class="avatar-inputrow" id="avatarForm"><input id="avatarInput" maxlength="1200" placeholder="உங்கள் கேள்வியை type செய்யுங்கள்..." autocomplete="off" aria-label="Your question"><button class="avatar-send" type="submit">Send</button></form>
+  <div class="avatar-note">AI responses may be imperfect. Voice features depend on your browser and device.</div>
+</aside>
+<script>
+(function(){
+  const launch=document.getElementById('avatarLaunch'),panel=document.getElementById('avatarPanel'),close=document.getElementById('avatarClose');
+  const chat=document.getElementById('avatarChat'),form=document.getElementById('avatarForm'),input=document.getElementById('avatarInput'),mic=document.getElementById('avatarMic'),stop=document.getElementById('avatarStop'),state=document.getElementById('avatarState');
+  const history=[];
+  function toggle(open){panel.classList.toggle('open',open);launch.setAttribute('aria-expanded',String(open));if(open)input.focus();}
+  launch.addEventListener('click',()=>toggle(!panel.classList.contains('open')));close.addEventListener('click',()=>toggle(false));
+  function add(text,who){const el=document.createElement('div');el.className='avatar-msg '+who;el.textContent=text;chat.appendChild(el);chat.scrollTop=chat.scrollHeight;return el;}
+  function speak(text){if(!('speechSynthesis' in window)){state.textContent='Voice output is not supported in this browser.';return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ta-IN';u.rate=.94;const voices=speechSynthesis.getVoices();const tamil=voices.find(v=>/^ta(-|_)/i.test(v.lang))||voices.find(v=>/tamil/i.test(v.name));if(tamil)u.voice=tamil;u.onstart=()=>state.textContent='🔊 பேசிக்கொண்டிருக்கிறேன்...';u.onend=()=>state.textContent='கேள்வி கேட்கலாம்!';u.onerror=()=>state.textContent='Voice unavailable. Read the reply above.';speechSynthesis.speak(u);}
+  stop.addEventListener('click',()=>{if('speechSynthesis'in window)speechSynthesis.cancel();state.textContent='Voice stopped.';});
+  async function ask(question){
+    add(question,'user');input.value='';input.disabled=true;state.textContent='AI யோசிக்கிறது...';const pending=add('ஒரு நிமிடம்...','bot');
+    try{
+      const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:question,history})});
+      const data=await response.json();if(!response.ok)throw new Error(data.error||'AI service error');
+      pending.textContent=data.reply;history.push({role:'user',content:question},{role:'assistant',content:data.reply});if(history.length>12)history.splice(0,history.length-12);speak(data.reply);
+    }catch(error){pending.textContent='⚠️ '+error.message;state.textContent='AI connection needs setup.';}
+    finally{input.disabled=false;input.focus();chat.scrollTop=chat.scrollHeight;}
+  }
+  form.addEventListener('submit',e=>{e.preventDefault();const q=input.value.trim();if(q&&!input.disabled)ask(q);});
+  const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(Recognition){const recognition=new Recognition();recognition.lang='ta-IN';recognition.interimResults=false;recognition.maxAlternatives=1;mic.addEventListener('click',()=>{try{recognition.start();state.textContent='🎙️ கேட்கிறேன்...';}catch(e){state.textContent='Microphone is already active.';}});recognition.onresult=e=>{const heard=e.results[0][0].transcript;input.value=heard;ask(heard);};recognition.onerror=e=>{state.textContent='Mic error: '+e.error+'. You can type instead.';};recognition.onend=()=>{if(!speechSynthesis.speaking)state.textContent='கேள்வி கேட்கலாம்!';};}
+  else{mic.disabled=true;mic.textContent='Mic not supported';mic.title='Use Chrome or type your question.';}
+})();
+</script>
+
 </body></html>
