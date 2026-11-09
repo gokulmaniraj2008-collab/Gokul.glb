@@ -1,0 +1,91 @@
+name: Inspect Avatar GLB (read-only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install GLB parser
+        run: python -m pip install --upgrade pip pygltflib
+
+      - name: Download original avatar without modifying it
+        run: |
+          curl --fail --location --silent --show-error \
+            "https://raw.githubusercontent.com/gokulmaniraj2008-collab/Gokul.glb/main/character" \
+            --output character.glb
+          sha256sum character.glb
+
+      - name: Inspect mesh, rig, morph targets and animations
+        run: |
+          python - <<'PY'
+          import json
+          from pygltflib import GLTF2
+
+          gltf = GLTF2().load_binary("character.glb")
+          report = {
+              "asset": gltf.asset.version if gltf.asset else None,
+              "scene_count": len(gltf.scenes or []),
+              "node_count": len(gltf.nodes or []),
+              "mesh_count": len(gltf.meshes or []),
+              "skin_count": len(gltf.skins or []),
+              "animation_count": len(gltf.animations or []),
+              "meshes": [],
+              "skins": [],
+              "animations": [],
+          }
+
+          for mesh in gltf.meshes or []:
+              primitives = []
+              for primitive in mesh.primitives or []:
+                  primitives.append({
+                      "mode": primitive.mode,
+                      "attributes": list((primitive.attributes.__dict__ if primitive.attributes else {}).keys()),
+                      "has_position": bool(primitive.attributes and primitive.attributes.POSITION is not None),
+                      "has_joints": bool(primitive.attributes and primitive.attributes.JOINTS_0 is not None),
+                      "has_weights": bool(primitive.attributes and primitive.attributes.WEIGHTS_0 is not None),
+                      "morph_target_count": len(primitive.targets or []),
+                  })
+              report["meshes"].append({
+                  "name": mesh.name,
+                  "weights_count": len(mesh.weights or []),
+                  "primitives": primitives,
+              })
+
+          for skin in gltf.skins or []:
+              report["skins"].append({
+                  "name": skin.name,
+                  "joint_count": len(skin.joints or []),
+                  "skeleton_node": skin.skeleton,
+              })
+
+          for animation in gltf.animations or []:
+              report["animations"].append({
+                  "name": animation.name,
+                  "channel_count": len(animation.channels or []),
+                  "sampler_count": len(animation.samplers or []),
+              })
+
+          with open("avatar-inspection.json", "w", encoding="utf-8") as f:
+              json.dump(report, f, indent=2)
+
+          print(json.dumps(report, indent=2))
+          PY
+
+      - name: Upload inspection report
+        uses: actions/upload-artifact@v4
+        with:
+          name: avatar-inspection-report
+          path: |
+            avatar-inspection.json
+          if-no-files-found: error
+          retention-days: 7
