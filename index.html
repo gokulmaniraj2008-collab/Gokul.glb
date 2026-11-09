@@ -20,31 +20,36 @@ footer{padding:26px 0;color:#788598;font-size:11px}.foot{display:flex;justify-co
 @media(max-width:800px){.links{display:none}.hero{padding:72px 0 60px}.hero-grid{grid-template-columns:1fr}.visual{min-height:280px}.about-grid{grid-template-columns:1fr}.skills{grid-template-columns:repeat(2,1fr)}.section-head{display:block}.section-head p{margin-top:12px}.contact{display:block}.contact .btn{margin-top:10px}}
 @media(max-width:520px){.wrap{width:min(100% - 28px,1120px)}h1{letter-spacing:-3px}.projects,.education{grid-template-columns:1fr}.skills{grid-template-columns:1fr 1fr}.navbtn{font-size:11px;padding:9px 12px}.hero{padding-top:58px}}
 
-/* Tamil AI avatar */
-.avatar-launch{position:fixed;right:18px;bottom:18px;z-index:50;border:1px solid #8df0d0;background:#8df0d0;color:#07120f;border-radius:999px;padding:13px 18px;font-weight:850;box-shadow:0 12px 40px #0008;cursor:pointer}
-.avatar-panel{position:fixed;right:18px;bottom:78px;z-index:51;width:min(390px,calc(100vw - 28px));height:min(610px,calc(100dvh - 105px));display:none;grid-template-rows:auto auto 1fr auto auto;background:#10151e;border:1px solid #354153;border-radius:22px;overflow:hidden;box-shadow:0 22px 80px #000b}
-.avatar-panel.open{display:grid}.avatar-head{padding:13px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #293343}.avatar-head strong{font-size:14px}.avatar-head small{display:block;color:#9ba7b8;font-size:11px}.avatar-close{background:#202a38;color:#fff;border:0;border-radius:9px;padding:7px 10px;font-size:18px}
-.avatar-stage{height:190px;background:radial-gradient(ellipse at center,#1b3433,#0b1018 70%);position:relative;display:grid;place-items:center;border-bottom:1px solid #293343}
-.avatar-stage model-viewer{width:100%;height:100%;--poster-color:transparent;background:transparent}
-.avatar-state{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:#bce9db;background:#0a1210c9;border:1px solid #345448;padding:4px 10px;border-radius:99px;white-space:nowrap}
-.avatar-chat{padding:13px;overflow:auto;display:flex;flex-direction:column;gap:9px;min-height:0}
-.avatar-msg{max-width:88%;padding:9px 11px;border-radius:13px;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
-.avatar-msg.bot{background:#1b2632;color:#edf5f4;align-self:flex-start;border:1px solid #2b3a49}
-.avatar-msg.user{background:#8df0d0;color:#07120f;align-self:flex-end}
-.avatar-tools{display:flex;gap:8px;padding:0 12px 10px}
-.avatar-inputrow{display:flex;gap:7px;padding:11px;border-top:1px solid #293343}
-.avatar-inputrow input{min-width:0;flex:1;background:#0b1018;border:1px solid #344153;color:#fff;border-radius:11px;padding:11px;font-size:13px;outline:none}
-.avatar-send,.avatar-mic{border:0;border-radius:11px;padding:10px 12px;font-weight:800;cursor:pointer}
+/* Integrated single-page 3D AI portfolio */
+.portfolio-ai{width:100%;min-height:560px;border:1px solid var(--line);border-radius:25px;background:linear-gradient(160deg,#151d29,#0b1018);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 70px #0005}
+.portfolio-avatar-stage{height:275px;flex:0 0 275px;background:radial-gradient(ellipse at center,#1b3433,#0b1018 72%);position:relative;border-bottom:1px solid #293343}
+.portfolio-avatar-stage model-viewer{width:100%;height:100%;--poster-color:transparent;background:transparent}
+.avatar-state{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:#bce9db;background:#0a1210c9;border:1px solid #345448;padding:4px 10px;border-radius:99px;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis}
+.avatar-head{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #293343}
+.avatar-head strong{font-size:14px}.avatar-head small{display:block;color:#9ba7b8;font-size:11px}.live-label{font-size:9px;color:var(--accent);letter-spacing:1px}
+.avatar-chat{padding:12px;overflow:auto;display:flex;flex-direction:column;gap:9px;min-height:115px;max-height:160px}
+.avatar-msg{max-width:92%;padding:9px 11px;border-radius:13px;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.avatar-msg.bot{background:#1b2632;color:#edf5f4;align-self:flex-start;border:1px solid #2b3a49}.avatar-msg.user{background:#8df0d0;color:#07120f;align-self:flex-end}
+.avatar-tools{display:flex;gap:8px;padding:0 12px 9px}.avatar-inputrow{display:flex;gap:7px;padding:10px;border-top:1px solid #293343}
+.avatar-inputrow input{min-width:0;flex:1;background:#0b1018;border:1px solid #344153;color:#fff;border-radius:11px;padding:10px;font-size:12px;outline:none}
+.avatar-send,.avatar-mic{border:0;border-radius:11px;padding:9px 11px;font-weight:800;font-size:11px;cursor:pointer}
 .avatar-send{background:#8df0d0;color:#07120f}.avatar-mic{background:#202b3a;color:#e8f2f2}
-.avatar-note{padding:0 13px 10px;color:#8e9bad;font-size:10px}
-@media(max-width:520px){.avatar-launch{right:12px;bottom:12px}.avatar-panel{right:8px;bottom:70px;width:calc(100vw - 16px);height:min(590px,calc(100dvh - 85px))}}
+.avatar-note{padding:0 12px 10px;color:#8e9bad;font-size:9px}
+@media(max-width:800px){.portfolio-ai{max-width:520px;margin:0 auto;min-height:540px}.portfolio-avatar-stage{height:260px;flex-basis:260px}}
 
 </style>
 </head>
 <body>
 <header><div class="wrap nav"><a class="brand" href="#home"><span class="mark">G</span> GOKUL<span style="color:var(--accent)">.</span></a><nav class="links"><a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#education">Education</a></nav><a class="navbtn" href="#contact">Let's connect ↗</a></div></header>
 <main id="home">
-<div class="hero"><div class="wrap hero-grid"><div><div class="availability"><span class="dot"></span> Curious mind · Always building</div><div class="eyebrow">Agricultural Engineering × Technology</div><h1>Hi, I'm<br><span>Gokul.</span></h1><p class="lead">I’m an engineering student and aspiring developer exploring the space between AI, software, and 3D technology. I enjoy turning ambitious ideas into real projects — one step at a time.</p><div class="actions"><a class="btn" href="#projects">Explore my work ↓</a><a class="btn secondary" href="https://github.com/gokulmaniraj2008-collab" target="_blank" rel="noreferrer">GitHub profile ↗</a></div><div class="social"><a href="https://github.com/gokulmaniraj2008-collab" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#contact">CONTACT ↗</a></div></div><div class="visual"><div class="orb"></div><div class="orbit"></div><div class="visual-label">AI · SOFTWARE · 3D</div></div></div></div>
+<div class="hero"><div class="wrap hero-grid"><div><div class="availability"><span class="dot"></span> Curious mind · Always building</div><div class="eyebrow">Agricultural Engineering × Technology</div><h1>Hi, I'm<br><span>Gokul.</span></h1><p class="lead">I’m an engineering student and aspiring developer exploring the space between AI, software, and 3D technology. I enjoy turning ambitious ideas into real projects — one step at a time.</p><div class="actions"><a class="btn" href="#projects">Explore my work ↓</a><a class="btn secondary" href="https://github.com/gokulmaniraj2008-collab" target="_blank" rel="noreferrer">GitHub profile ↗</a></div><div class="social"><a href="https://github.com/gokulmaniraj2008-collab" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#contact">CONTACT ↗</a></div></div><div class="portfolio-ai">
+  <div class="portfolio-avatar-stage"><model-viewer src="https://raw.githubusercontent.com/gokulmaniraj2008-collab/Gokul.glb/main/character" alt="Gokul's 3D avatar" disable-pan disable-zoom camera-orbit="0deg 75deg 2.5m" min-camera-orbit="0deg 75deg 2.5m" max-camera-orbit="0deg 75deg 2.5m" shadow-intensity="0.7" exposure="1" interaction-prompt="none" loading="eager"></model-viewer><span class="avatar-state" id="avatarState">வணக்கம்! Ask me anything about Gokul.</span></div>
+  <div class="avatar-head"><div><strong>🤖 Gokul's AI Avatar</strong><small>தமிழில் பேசலாம் · Ask about my portfolio</small></div><span class="live-label">● ONLINE</span></div>
+  <div class="avatar-chat" id="avatarChat" aria-live="polite"><div class="avatar-msg bot">வணக்கம்! நான் Gokul-ன் portfolio AI assistant. அவருடைய projects, skills, education பற்றி தமிழில் கேளுங்கள்! 😊</div></div>
+  <div class="avatar-tools"><button class="avatar-mic" id="avatarMic" type="button">🎙️ பேசுங்கள்</button><button class="avatar-mic" id="avatarStop" type="button">🔇 Stop voice</button></div>
+  <form class="avatar-inputrow" id="avatarForm"><input id="avatarInput" maxlength="1200" placeholder="உங்கள் கேள்வியை type செய்யுங்கள்..." autocomplete="off" aria-label="Your question"><button class="avatar-send" type="submit">Send</button></form>
+  <div class="avatar-note">Voice features depend on your browser and device.</div>
+</div></div></div>
 <section id="about"><div class="wrap"><div class="section-head"><div><div class="eyebrow">A little about me</div><h2>Curious by nature.<br>Builder by choice.</h2></div><p>I like learning across disciplines — from agricultural engineering fundamentals to building web experiences, AI experiments, and 3D environments.</p></div><div class="about-grid"><div class="panel"><p>I’m currently pursuing B.Tech in Agricultural Engineering at RVS Technical Campus, Coimbatore. Alongside my studies, I explore programming, product building, 3D modelling, and practical AI projects.</p><p>My approach is simple: learn the fundamentals, build a working version, test it, and improve it. I’m interested in projects that connect technology with real-world needs.</p></div><div class="facts"><div class="fact"><strong>AI + Software</strong><span>Learning through hands-on projects</span></div><div class="fact"><strong>3D Creation</strong><span>Models, scenes and interactive viewers</span></div><div class="fact"><strong>AgriTech</strong><span>Engineering with practical impact</span></div><div class="fact"><strong>Build mindset</strong><span>Prototype, test and iterate</span></div></div></div></div></section>
 <section id="skills"><div class="wrap"><div class="section-head"><div><div class="eyebrow">My toolkit</div><h2>Skills & technologies</h2></div><p>A growing toolkit built through coursework, experiments, and independent projects.</p></div><div class="skills">
 <div class="skill"><h3>Programming</h3><div class="tags"><span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">HTML</span><span class="tag">CSS</span></div></div>
@@ -66,29 +71,12 @@ footer{padding:26px 0;color:#788598;font-size:11px}.foot{display:flex;justify-co
 <footer><div class="wrap foot"><span>© <span id="year"></span> Gokul. Designed & built with curiosity.</span><a href="#home">Back to top ↑</a></div></footer>
 <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 
-<!-- Tamil AI talking avatar -->
+<!-- Single-page integrated Tamil AI avatar -->
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
-<button class="avatar-launch" id="avatarLaunch" aria-expanded="false">🤖 Talk to my AI avatar</button>
-<aside class="avatar-panel" id="avatarPanel" aria-label="Tamil AI portfolio assistant">
-  <div class="avatar-head"><div><strong>Gokul's AI Avatar</strong><small>தமிழில் பேசலாம் · Ask about my portfolio</small></div><button class="avatar-close" id="avatarClose" aria-label="Close">×</button></div>
-  <div class="avatar-stage">
-    <model-viewer src="https://raw.githubusercontent.com/gokulmaniraj2008-collab/Gokul.glb/main/character" alt="Gokul's 3D avatar" disable-pan disable-zoom camera-orbit="0deg 75deg 2.5m" min-camera-orbit="0deg 75deg 2.5m" max-camera-orbit="0deg 75deg 2.5m" shadow-intensity="0.7" exposure="1" interaction-prompt="none" loading="eager"></model-viewer>
-    <span class="avatar-state" id="avatarState">வணக்கம்! Ask me anything about Gokul.</span>
-  </div>
-  <div class="avatar-chat" id="avatarChat" aria-live="polite">
-    <div class="avatar-msg bot">வணக்கம்! நான் Gokul-ன் portfolio AI assistant. அவருடைய projects, skills, education பற்றி தமிழில் கேளுங்கள்! 😊</div>
-  </div>
-  <div class="avatar-tools"><button class="avatar-mic" id="avatarMic">🎙️ பேசுங்கள்</button><button class="avatar-mic" id="avatarStop">🔇 Stop voice</button></div>
-  <form class="avatar-inputrow" id="avatarForm"><input id="avatarInput" maxlength="1200" placeholder="உங்கள் கேள்வியை type செய்யுங்கள்..." autocomplete="off" aria-label="Your question"><button class="avatar-send" type="submit">Send</button></form>
-  <div class="avatar-note">AI responses may be imperfect. Voice features depend on your browser and device.</div>
-</aside>
 <script>
 (function(){
-  const launch=document.getElementById('avatarLaunch'),panel=document.getElementById('avatarPanel'),close=document.getElementById('avatarClose');
   const chat=document.getElementById('avatarChat'),form=document.getElementById('avatarForm'),input=document.getElementById('avatarInput'),mic=document.getElementById('avatarMic'),stop=document.getElementById('avatarStop'),state=document.getElementById('avatarState');
   const history=[];
-  function toggle(open){panel.classList.toggle('open',open);launch.setAttribute('aria-expanded',String(open));if(open)input.focus();}
-  launch.addEventListener('click',()=>toggle(!panel.classList.contains('open')));close.addEventListener('click',()=>toggle(false));
   function add(text,who){const el=document.createElement('div');el.className='avatar-msg '+who;el.textContent=text;chat.appendChild(el);chat.scrollTop=chat.scrollHeight;return el;}
   function speak(text){if(!('speechSynthesis' in window)){state.textContent='Voice output is not supported in this browser.';return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ta-IN';u.rate=.94;const voices=speechSynthesis.getVoices();const tamil=voices.find(v=>/^ta(-|_)/i.test(v.lang))||voices.find(v=>/tamil/i.test(v.name));if(tamil)u.voice=tamil;u.onstart=()=>state.textContent='🔊 பேசிக்கொண்டிருக்கிறேன்...';u.onend=()=>state.textContent='கேள்வி கேட்கலாம்!';u.onerror=()=>state.textContent='Voice unavailable. Read the reply above.';speechSynthesis.speak(u);}
   stop.addEventListener('click',()=>{if('speechSynthesis'in window)speechSynthesis.cancel();state.textContent='Voice stopped.';});
