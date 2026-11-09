@@ -22,7 +22,7 @@ footer{padding:26px 0;color:#788598;font-size:11px}.foot{display:flex;justify-co
 
 /* Integrated single-page 3D AI portfolio */
 .portfolio-ai{width:100%;min-height:560px;border:1px solid var(--line);border-radius:25px;background:linear-gradient(160deg,#151d29,#0b1018);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 70px #0005}
-.portfolio-avatar-stage{height:275px;flex:0 0 275px;background:radial-gradient(ellipse at center,#1b3433,#0b1018 72%);position:relative;border-bottom:1px solid #293343}
+.portfolio-avatar-stage{height:440px;flex:0 0 440px;background:radial-gradient(ellipse at center,#1b3433,#0b1018 72%);position:relative;border-bottom:1px solid #293343}
 .portfolio-avatar-stage model-viewer{width:100%;height:100%;--poster-color:transparent;background:transparent}
 .avatar-state{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:#bce9db;background:#0a1210c9;border:1px solid #345448;padding:4px 10px;border-radius:99px;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis}
 .avatar-head{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #293343}
@@ -35,7 +35,7 @@ footer{padding:26px 0;color:#788598;font-size:11px}.foot{display:flex;justify-co
 .avatar-send,.avatar-mic{border:0;border-radius:11px;padding:9px 11px;font-weight:800;font-size:11px;cursor:pointer}
 .avatar-send{background:#8df0d0;color:#07120f}.avatar-mic{background:#202b3a;color:#e8f2f2}
 .avatar-note{padding:0 12px 10px;color:#8e9bad;font-size:9px}
-@media(max-width:800px){.portfolio-ai{max-width:520px;margin:0 auto;min-height:540px}.portfolio-avatar-stage{height:260px;flex-basis:260px}}
+@media(max-width:800px){.portfolio-ai{max-width:520px;margin:0 auto;min-height:540px}.portfolio-avatar-stage{height:390px;flex-basis:390px}}
 
 </style>
 </head>
@@ -43,7 +43,7 @@ footer{padding:26px 0;color:#788598;font-size:11px}.foot{display:flex;justify-co
 <header><div class="wrap nav"><a class="brand" href="#home"><span class="mark">G</span> GOKUL<span style="color:var(--accent)">.</span></a><nav class="links"><a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#education">Education</a></nav><a class="navbtn" href="#contact">Let's connect ↗</a></div></header>
 <main id="home">
 <div class="hero"><div class="wrap hero-grid"><div><div class="availability"><span class="dot"></span> Curious mind · Always building</div><div class="eyebrow">Agricultural Engineering × Technology</div><h1>Hi, I'm<br><span>Gokul.</span></h1><p class="lead">I’m an engineering student and aspiring developer exploring the space between AI, software, and 3D technology. I enjoy turning ambitious ideas into real projects — one step at a time.</p><div class="actions"><a class="btn" href="#projects">Explore my work ↓</a><a class="btn secondary" href="https://github.com/gokulmaniraj2008-collab" target="_blank" rel="noreferrer">GitHub profile ↗</a></div><div class="social"><a href="https://github.com/gokulmaniraj2008-collab" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#contact">CONTACT ↗</a></div></div><div class="portfolio-ai">
-  <div class="portfolio-avatar-stage"><model-viewer id="gokulAvatar" src="https://raw.githubusercontent.com/gokulmaniraj2008-collab/Gokul.glb/main/character" alt="Gokul's 3D avatar" disable-pan disable-zoom camera-target="auto auto auto" camera-orbit="0deg 75deg auto" min-camera-orbit="0deg 75deg auto" max-camera-orbit="0deg 75deg auto" field-of-view="30deg" shadow-intensity="0.8" exposure="1.2" environment-image="neutral" interaction-prompt="none" loading="eager"></model-viewer><span class="avatar-state" id="avatarState">வணக்கம்! Ask me anything about Gokul.</span></div>
+  <div class="portfolio-avatar-stage"><model-viewer id="gokulAvatar" src="https://raw.githubusercontent.com/gokulmaniraj2008-collab/Gokul.glb/main/character" alt="Gokul's 3D avatar" disable-pan disable-zoom camera-target="auto auto auto" camera-orbit="0deg 75deg auto" field-of-view="45deg" shadow-intensity="0.8" exposure="1.2" environment-image="neutral" interaction-prompt="none" loading="eager"></model-viewer><span class="avatar-state" id="avatarState">வணக்கம்! Ask me anything about Gokul.</span></div>
   <div class="avatar-head"><div><strong>🤖 Gokul's AI Avatar</strong><small>தமிழில் பேசலாம் · Ask about my portfolio</small></div><span class="live-label">● ONLINE</span></div>
   <div class="avatar-chat" id="avatarChat" aria-live="polite"><div class="avatar-msg bot">வணக்கம்! நான் Gokul-ன் portfolio AI assistant. அவருடைய projects, skills, education பற்றி தமிழில் கேளுங்கள்! 😊</div></div>
   <div class="avatar-tools"><button class="avatar-mic" id="avatarMic" type="button">🎙️ பேசுங்கள்</button><button class="avatar-mic" id="avatarStop" type="button">🔇 Stop voice</button></div>
