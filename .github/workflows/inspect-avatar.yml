@@ -15,8 +15,8 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install GLB parser
-        run: python -m pip install --upgrade pip pygltflib
+      - name: Install GLB inspection tools
+        run: python -m pip install --upgrade pip pygltflib trimesh
 
       - name: Download original avatar without modifying it
         run: |
@@ -25,67 +25,64 @@ jobs:
             --output character.glb
           sha256sum character.glb
 
-      - name: Inspect mesh, rig, morph targets and animations
+      - name: Inspect rig, morph targets and geometry
         run: |
           python - <<'PY'
           import json
+          import trimesh
           from pygltflib import GLTF2
 
           gltf = GLTF2().load_binary("character.glb")
+          scene = trimesh.load("character.glb", force="scene")
+          geometry = []
+          for name, mesh in scene.geometry.items():
+              geometry.append({
+                  "name": name,
+                  "vertices": int(len(mesh.vertices)),
+                  "faces": int(len(mesh.faces)),
+                  "bounds_min": [round(float(v), 6) for v in mesh.bounds[0]],
+                  "bounds_max": [round(float(v), 6) for v in mesh.bounds[1]],
+                  "center_mass": [round(float(v), 6) for v in mesh.center_mass],
+              })
+
+          meshes = []
+          for mesh in gltf.meshes or []:
+              primitives = []
+              for primitive in mesh.primitives or []:
+                  attrs = primitive.attributes
+                  primitives.append({
+                      "position_accessor": attrs.POSITION if attrs else None,
+                      "joints_accessor": attrs.JOINTS_0 if attrs else None,
+                      "weights_accessor": attrs.WEIGHTS_0 if attrs else None,
+                      "morph_target_count": len(primitive.targets or []),
+                  })
+              meshes.append({"name": mesh.name, "primitives": primitives})
+
           report = {
-              "asset": gltf.asset.version if gltf.asset else None,
+              "asset_version": gltf.asset.version if gltf.asset else None,
               "scene_count": len(gltf.scenes or []),
               "node_count": len(gltf.nodes or []),
               "mesh_count": len(gltf.meshes or []),
               "skin_count": len(gltf.skins or []),
               "animation_count": len(gltf.animations or []),
-              "meshes": [],
-              "skins": [],
-              "animations": [],
+              "nodes": [
+                  {"name": n.name, "mesh": n.mesh, "skin": n.skin,
+                   "translation": n.translation, "rotation": n.rotation,
+                   "scale": n.scale}
+                  for n in (gltf.nodes or [])
+              ],
+              "meshes": meshes,
+              "geometry": geometry,
           }
-
-          for mesh in gltf.meshes or []:
-              primitives = []
-              for primitive in mesh.primitives or []:
-                  primitives.append({
-                      "mode": primitive.mode,
-                      "attributes": list((primitive.attributes.__dict__ if primitive.attributes else {}).keys()),
-                      "has_position": bool(primitive.attributes and primitive.attributes.POSITION is not None),
-                      "has_joints": bool(primitive.attributes and primitive.attributes.JOINTS_0 is not None),
-                      "has_weights": bool(primitive.attributes and primitive.attributes.WEIGHTS_0 is not None),
-                      "morph_target_count": len(primitive.targets or []),
-                  })
-              report["meshes"].append({
-                  "name": mesh.name,
-                  "weights_count": len(mesh.weights or []),
-                  "primitives": primitives,
-              })
-
-          for skin in gltf.skins or []:
-              report["skins"].append({
-                  "name": skin.name,
-                  "joint_count": len(skin.joints or []),
-                  "skeleton_node": skin.skeleton,
-              })
-
-          for animation in gltf.animations or []:
-              report["animations"].append({
-                  "name": animation.name,
-                  "channel_count": len(animation.channels or []),
-                  "sampler_count": len(animation.samplers or []),
-              })
-
-          with open("avatar-inspection.json", "w", encoding="utf-8") as f:
+          with open("avatar-geometry-report.json", "w", encoding="utf-8") as f:
               json.dump(report, f, indent=2)
-
           print(json.dumps(report, indent=2))
           PY
 
-      - name: Upload inspection report
+      - name: Upload geometry report
         uses: actions/upload-artifact@v4
         with:
-          name: avatar-inspection-report
-          path: |
-            avatar-inspection.json
+          name: avatar-geometry-report
+          path: avatar-geometry-report.json
           if-no-files-found: error
           retention-days: 7
