@@ -1,0 +1,94 @@
+name: Avatar Rig Prototype Preview (non-destructive)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install preview tools
+        run: python -m pip install --upgrade pip trimesh matplotlib pillow
+
+      - name: Download original avatar
+        run: |
+          curl --fail --location --silent --show-error \
+            "https://raw.githubusercontent.com/gokulmaniraj2008-collab/Gokul.glb/main/character" \
+            --output character-original.glb
+          sha256sum character-original.glb
+
+      - name: Generate safe facial-rig inspection previews
+        run: |
+          python - <<'PY'
+          import json
+          import shutil
+          import numpy as np
+          import trimesh
+          import matplotlib
+          matplotlib.use("Agg")
+          import matplotlib.pyplot as plt
+          from pathlib import Path
+
+          out = Path("avatar-rig-prototype")
+          out.mkdir(exist_ok=True)
+          scene = trimesh.load("character-original.glb", force="scene")
+          meshes = [g for g in scene.geometry.values() if isinstance(g, trimesh.Trimesh)]
+          if not meshes:
+              raise RuntimeError("No triangle mesh found in original GLB")
+          mesh = trimesh.util.concatenate(meshes)
+          v = np.asarray(mesh.vertices)
+          bounds = mesh.bounds
+          y_mid = (bounds[0, 1] + bounds[1, 1]) / 2
+          y_top = bounds[1, 1]
+          head_cut = y_top - (y_top - bounds[0, 1]) * 0.38
+          head = v[v[:, 1] >= head_cut]
+          views = [
+              ("front_plus_z", v[:, 0], v[:, 1], head[:, 0], head[:, 1], "X", "Y"),
+              ("front_minus_z", v[:, 0], v[:, 1], head[:, 0], head[:, 1], "X", "Y"),
+              ("side_plus_x", v[:, 2], v[:, 1], head[:, 2], head[:, 1], "Z", "Y"),
+              ("side_minus_x", v[:, 2], v[:, 1], head[:, 2], head[:, 1], "Z", "Y"),
+          ]
+          for name, a, b, ha, hb, xlabel, ylabel in views:
+              for suffix, xx, yy in [("full", a, b), ("head", ha, hb)]:
+                  fig, ax = plt.subplots(figsize=(6, 8), dpi=150)
+                  ax.scatter(xx, yy, s=0.12, c="#26384a", alpha=0.42, linewidths=0)
+                  ax.set_aspect("equal", adjustable="datalim")
+                  ax.set_xlabel(xlabel)
+                  ax.set_ylabel(ylabel)
+                  ax.set_title(f"{name} / {suffix} (vertex projection)")
+                  ax.grid(True, alpha=0.15)
+                  fig.tight_layout()
+                  fig.savefig(out / f"{name}_{suffix}.png")
+                  plt.close(fig)
+
+          report = {
+              "source": "character-original.glb",
+              "prototype_copy": "character-rig-prototype.glb",
+              "original_modified": False,
+              "vertices": int(len(v)),
+              "faces": int(len(mesh.faces)),
+              "bounds_min": bounds[0].tolist(),
+              "bounds_max": bounds[1].tolist(),
+              "head_region_preview_cut_y": float(head_cut),
+              "rigging_status": "not yet rigged; awaiting visual confirmation of face orientation and mouth region"
+          }
+          (out / "prototype-report.json").write_text(json.dumps(report, indent=2))
+          shutil.copy2("character-original.glb", out / "character-rig-prototype.glb")
+          print(json.dumps(report, indent=2))
+          PY
+
+      - name: Upload separate prototype and previews
+        uses: actions/upload-artifact@v4
+        with:
+          name: avatar-rig-prototype-preview
+          path: avatar-rig-prototype/
+          if-no-files-found: error
+          retention-days: 7
