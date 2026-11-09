@@ -77,9 +77,44 @@ footer{padding:26px 0;color:#788598;font-size:11px}.foot{display:flex;justify-co
 (function(){
   const chat=document.getElementById('avatarChat'),form=document.getElementById('avatarForm'),input=document.getElementById('avatarInput'),mic=document.getElementById('avatarMic'),stop=document.getElementById('avatarStop'),state=document.getElementById('avatarState');
   const history=[];
+  const avatar=document.getElementById('gokulAvatar');
+  let mouthTargets=[];
+  let mouthFrame=0;
+  let mouthActive=false;
+  function scanMouthTargets(){
+    mouthTargets=[];
+    const scene=avatar && avatar.model && avatar.model.scene;
+    if(scene && typeof scene.traverse==='function'){
+      scene.traverse(node=>{
+        if(!node.isMesh || !node.morphTargetInfluences || !node.morphTargetDictionary)return;
+        for(const [name,index] of Object.entries(node.morphTargetDictionary)){
+          if(/mouth|jaw|viseme|phoneme|口|aa|oh|ou/i.test(name)){
+            mouthTargets.push({node,index,name:name.toLowerCase()});
+          }
+        }
+      });
+    }
+    state.textContent=mouthTargets.length
+      ? 'தமிழ் voice + facial animation ready'
+      : 'தமிழ் voice ready · இந்த GLB-க்கு mouth rig தேவை';
+  }
+  if(avatar)avatar.addEventListener('load',scanMouthTargets);
+  function animateMouth(){
+    if(!mouthActive)return;
+    const phase=Date.now()/115;
+    mouthTargets.forEach(target=>{
+      const isOpen=/open|jaw|aa|ah|viseme_aa|viseme_oh/.test(target.name);
+      const isRound=/oh|ou|viseme_o|viseme_u/.test(target.name);
+      const weight=isOpen ? (isRound ? Math.max(0,Math.sin(phase*.62))*.42 : Math.max(0,Math.sin(phase))*.72) : 0;
+      target.node.morphTargetInfluences[target.index]=weight;
+    });
+    mouthFrame=requestAnimationFrame(animateMouth);
+  }
+  function startMouth(){if(!mouthTargets.length)return;mouthActive=true;cancelAnimationFrame(mouthFrame);animateMouth();}
+  function stopMouth(){mouthActive=false;cancelAnimationFrame(mouthFrame);mouthTargets.forEach(t=>{t.node.morphTargetInfluences[t.index]=0;});}
   function add(text,who){const el=document.createElement('div');el.className='avatar-msg '+who;el.textContent=text;chat.appendChild(el);chat.scrollTop=chat.scrollHeight;return el;}
-  function speak(text){if(!('speechSynthesis' in window)){state.textContent='Voice output is not supported in this browser.';return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ta-IN';u.rate=.94;const voices=speechSynthesis.getVoices();const tamil=voices.find(v=>/^ta(-|_)/i.test(v.lang))||voices.find(v=>/tamil/i.test(v.name));if(tamil)u.voice=tamil;u.onstart=()=>state.textContent='🔊 பேசிக்கொண்டிருக்கிறேன்...';u.onend=()=>state.textContent='கேள்வி கேட்கலாம்!';u.onerror=()=>state.textContent='Voice unavailable. Read the reply above.';speechSynthesis.speak(u);}
-  stop.addEventListener('click',()=>{if('speechSynthesis'in window)speechSynthesis.cancel();state.textContent='Voice stopped.';});
+  function speak(text){if(!('speechSynthesis' in window)){state.textContent='Voice output is not supported in this browser.';return;}speechSynthesis.cancel();stopMouth();const u=new SpeechSynthesisUtterance(text);u.lang='ta-IN';u.rate=.94;const voices=speechSynthesis.getVoices();const tamil=voices.find(v=>/^ta(-|_)/i.test(v.lang))||voices.find(v=>/tamil/i.test(v.name));if(tamil)u.voice=tamil;u.onstart=()=>{if(mouthTargets.length){state.textContent='🔊 பேசுகிறேன் · mouth animation';startMouth();}else{state.textContent='🔊 பேசுகிறேன் · GLB facial rig இல்லை';}};u.onend=()=>{stopMouth();state.textContent=mouthTargets.length?'கேள்வி கேட்கலாம்!':'Voice முடிந்தது · GLB-க்கு mouth rig தேவை';};u.onerror=()=>{stopMouth();state.textContent='Voice unavailable. Read the reply above.';};speechSynthesis.speak(u);}
+  stop.addEventListener('click',()=>{if('speechSynthesis'in window)speechSynthesis.cancel();stopMouth();state.textContent='Voice stopped.';});
   async function ask(question){
     add(question,'user');input.value='';input.disabled=true;state.textContent='AI யோசிக்கிறது...';const pending=add('ஒரு நிமிடம்...','bot');
     try{
